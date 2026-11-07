@@ -1,39 +1,38 @@
 using Taller.Consola.Models;
+using Taller.Consola.Repositories;
 
 namespace Taller.Consola.Services;
 
 public class InventarioService
 {
-    // Lista privada en memoria que guarda todos nuestros objetos Insumo
-    private readonly List<Insumo> _insumos = new List<Insumo>();
+    private readonly InsumoRepository _repository = new InsumoRepository();
 
-    // Método para dar de alta un insumo en nuestra lista
     public void RegistrarInsumo(Insumo nuevoInsumo)
     {
-        // Validación de negocio: no permitir dos insumos con el mismo nombre exacto
-        bool existe = _insumos.Any(i => i.Nombre.Equals(nuevoInsumo.Nombre, StringComparison.OrdinalIgnoreCase));
+        List<Insumo> actuales = _repository.ObtenerTodos();
+        bool existe = actuales.Any(i => i.Nombre.Equals(nuevoInsumo.Nombre, StringComparison.OrdinalIgnoreCase));
         
         if (existe)
-            throw new InvalidOperationException($"Ya existe un insumo registrado con el nombre '{nuevoInsumo.Nombre}'.");
+            throw new InvalidOperationException($"Ya existe el insumo '{nuevoInsumo.Nombre}' en la base de datos.");
 
-        _insumos.Add(nuevoInsumo);
+        _repository.Insertar(nuevoInsumo);
     }
 
-    // Devuelve todos los insumos
     public List<Insumo> ObtenerTodos()
     {
-        return _insumos;
+        return _repository.ObtenerTodos();
     }
 
-    // Usa LINQ (.Where) para filtrar igual que un WHERE de SQL
     public List<Insumo> ObtenerCriticosParaReponer()
     {
-        return _insumos.Where(i => i.RequiereReposicion()).ToList();
+        return _repository.ObtenerTodos()
+                          .Where(i => i.RequiereReposicion())
+                          .ToList();
     }
 
-    // Calcula cuánta plata tenés parada en mercadería (Precio * Stock de cada uno)
     public decimal CalcularValorTotalInventario()
     {
-        return _insumos.Sum(i => i.PrecioUnitario * i.StockActual);
+        return _repository.ObtenerTodos()
+                          .Sum(i => i.PrecioUnitario * i.StockActual);
     }
 }

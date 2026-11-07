@@ -33,6 +33,13 @@ public class Insumo
         StockMinimo = stockMinimo;
     }
 
+    // Constructor para cuando leemos un insumo que YA EXISTE en la base de datos SQL (trae Id)
+    public Insumo(int id, string nombre, string categoria, decimal precioUnitario, int stockActual, int stockMinimo)
+        : this(nombre, categoria, precioUnitario, stockActual, stockMinimo) // Llama al primer constructor para reutilizar las validaciones
+    {
+        Id = id;
+    }
+
     // 3. MÉTODOS DE COMPORTAMIENTO (Lo que el objeto sabe hacer con sus propios datos)
     public void AgregarStock(int cantidad)
     {
