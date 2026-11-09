@@ -12,6 +12,8 @@ while (continuar)
     Console.WriteLine("1. Ver todos los insumos en stock");
     Console.WriteLine("2. Ver alertas de reposición (Stock Crítico)");
     Console.WriteLine("3. Registrar un nuevo insumo");
+    Console.WriteLine("4. Registrar entrada / salida de stock (UPDATE)");
+    Console.WriteLine("5. Eliminar un insumo por ID (DELETE)");
     Console.WriteLine("0. Salir");
     Console.Write("\nSeleccione una opción: ");
 
@@ -30,6 +32,12 @@ while (continuar)
             case "3":
                 CargarNuevoInsumo(inventario);
                 break;
+            case "4":
+                GestionarMovimientoStock(inventario);
+                break;
+            case "5":
+                BorrarInsumo(inventario);
+                break;
             case "0":
                 continuar = false;
                 Console.WriteLine("Cerrando sistema...");
@@ -42,7 +50,7 @@ while (continuar)
     catch (Exception ex)
     {
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"\n[ERROR DE VALIDACIÓN]: {ex.Message}");
+        Console.WriteLine($"\n[ERROR]: {ex.Message}");
         Console.ResetColor();
     }
 }
@@ -107,5 +115,44 @@ static void CargarNuevoInsumo(InventarioService servicio)
 
     Console.ForegroundColor = ConsoleColor.Green;
     Console.WriteLine("\n¡Insumo guardado correctamente en SQL Server!");
+    Console.ResetColor();
+}
+
+static void GestionarMovimientoStock(InventarioService servicio)
+{
+    Console.WriteLine("\n--- MOVIMIENTO DE STOCK ---");
+    Console.Write("Ingrese el ID del insumo: ");
+    if (!int.TryParse(Console.ReadLine(), out int id))
+        throw new ArgumentException("El ID debe ser un número entero.");
+
+    Console.Write("¿Es ingreso de mercadería (I) o salida/consumo (S)?: ");
+    string tipo = (Console.ReadLine() ?? "").Trim().ToUpper();
+
+    if (tipo != "I" && tipo != "S")
+        throw new ArgumentException("Debe ingresar 'I' para ingreso o 'S' para salida.");
+
+    Console.Write("Cantidad de unidades: ");
+    if (!int.TryParse(Console.ReadLine(), out int cantidad))
+        throw new ArgumentException("La cantidad debe ser un número entero.");
+
+    bool esIngreso = (tipo == "I");
+    servicio.ModificarStock(id, cantidad, esIngreso);
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine("\n¡Stock actualizado correctamente en SQL Server!");
+    Console.ResetColor();
+}
+
+static void BorrarInsumo(InventarioService servicio)
+{
+    Console.WriteLine("\n--- ELIMINAR INSUMO ---");
+    Console.Write("Ingrese el ID del insumo a eliminar: ");
+    if (!int.TryParse(Console.ReadLine(), out int id))
+        throw new ArgumentException("El ID debe ser un número entero.");
+
+    servicio.EliminarInsumo(id);
+
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine($"\n¡Insumo con ID {id} eliminado de SQL Server!");
     Console.ResetColor();
 }

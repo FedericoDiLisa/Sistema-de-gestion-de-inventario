@@ -61,4 +61,37 @@ public class InsumoRepository
 
         return lista;
     }
+
+    // 3. ACTUALIZAR STOCK EN SQL (UPDATE)
+    public bool ActualizarStock(int id, int nuevoStock)
+    {
+        using SqlConnection conexion = new SqlConnection(_connectionString);
+        conexion.Open();
+
+        string query = "UPDATE Insumos SET StockActual = @NuevoStock WHERE Id = @Id;";
+
+        using SqlCommand comando = new SqlCommand(query, conexion);
+        comando.Parameters.AddWithValue("@NuevoStock", nuevoStock);
+        comando.Parameters.AddWithValue("@Id", id);
+
+        // ExecuteNonQuery devuelve cuántas filas fueron modificadas en SQL.
+        // Si devuelve más de 0, significa que encontró el ID y lo actualizó.
+        int filasAfectadas = comando.ExecuteNonQuery();
+        return filasAfectadas > 0;
+    }
+
+    // 4. ELIMINAR UN INSUMO EN SQL (DELETE)
+    public bool Eliminar(int id)
+    {
+        using SqlConnection conexion = new SqlConnection(_connectionString);
+        conexion.Open();
+
+        string query = "DELETE FROM Insumos WHERE Id = @Id;";
+
+        using SqlCommand comando = new SqlCommand(query, conexion);
+        comando.Parameters.AddWithValue("@Id", id);
+
+        int filasAfectadas = comando.ExecuteNonQuery();
+        return filasAfectadas > 0;
+    }
 }

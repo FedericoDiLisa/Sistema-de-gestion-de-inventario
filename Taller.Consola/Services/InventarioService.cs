@@ -35,4 +35,29 @@ public class InventarioService
         return _repository.ObtenerTodos()
                           .Sum(i => i.PrecioUnitario * i.StockActual);
     }
+
+    public void ModificarStock(int idInsumo, int cantidad, bool esIngreso)
+    {
+        // 1. Buscamos el insumo en la base de datos usando LINQ (.FirstOrDefault)
+        Insumo? insumo = _repository.ObtenerTodos().FirstOrDefault(i => i.Id == idInsumo);
+
+        if (insumo == null)
+            throw new KeyNotFoundException($"No existe ningún insumo con el ID {idInsumo}.");
+
+        // 2. Usamos los métodos de POO de tu clase Insumo (que validan que no quede stock negativo)
+        if (esIngreso)
+            insumo.AgregarStock(cantidad);
+        else
+            insumo.DescontarStock(cantidad);
+
+        // 3. Guardamos el nuevo stock resultante en SQL Server
+        _repository.ActualizarStock(insumo.Id, insumo.StockActual);
+    }
+
+    public void EliminarInsumo(int idInsumo)
+    {
+        bool eliminado = _repository.Eliminar(idInsumo);
+        if (!eliminado)
+            throw new KeyNotFoundException($"No se encontró ningún insumo con el ID {idInsumo} para eliminar.");
+    }
 }
