@@ -2,7 +2,10 @@
 
 Aplicación de consola desarrollada en **C# (.NET 10)** con persistencia en **SQL Server**, diseñada bajo una **arquitectura en capas** para gestionar el control de stock, costos y alertas de reposición de insumos técnicos (impresión 3D, electricidad y mecánica).
 
-## 🚀 Tecnologías y Conceptos Aplicados
+> 💡 **Nota de transparencia y propósito educativo:**
+> Este repositorio fue construido como un **laboratorio práctico de estudio mediante *Pair Programming* asistido por IA**. El objetivo principal de este proyecto es trascender los ejercicios básicos de consola del primer año académico para comprender, desglosar y asimilar cómo se estructuran las bases y buenas prácticas de la industria (separación de responsabilidades en capas, encapsulamiento real en POO, consultas seguras a SQL Server y flujo de trabajo con Git).
+
+## 🚀 Tecnologías y Conceptos en Estudio
 
 * **Lenguaje y Framework:** C# / .NET 10
 * **Base de Datos:** SQL Server (`Microsoft.Data.SqlClient` - ADO.NET)
@@ -19,9 +22,3 @@ Aplicación de consola desarrollada en **C# (.NET 10)** con persistencia en **SQ
 3. **Alta de insumos (`INSERT`):** Registro con validación de duplicados y reglas de negocio.
 4. **Movimientos de inventario (`UPDATE`):** Ingreso y egreso de materiales con control de stock negativo.
 5. **Baja de insumos (`DELETE`):** Eliminación física por identificador (`Id`).
-
-## ⚙️ Cómo ejecutar el proyecto localmente
-
-1. Clonar el repositorio:
-   ```bash
-   git clone [https://github.com/FedericoDiLisa/SistemaGestionTaller.git](https://github.com/FedericoDiLisa/SistemaGestionTaller.git)
