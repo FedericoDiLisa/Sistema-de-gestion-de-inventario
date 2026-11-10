@@ -14,6 +14,7 @@ while (continuar)
     Console.WriteLine("3. Registrar un nuevo insumo");
     Console.WriteLine("4. Registrar entrada / salida de stock (UPDATE)");
     Console.WriteLine("5. Eliminar un insumo por ID (DELETE)");
+    Console.WriteLine("6. Buscar insumos por categoría");
     Console.WriteLine("0. Salir");
     Console.Write("\nSeleccione una opción: ");
 
@@ -37,6 +38,9 @@ while (continuar)
                 break;
             case "5":
                 BorrarInsumo(inventario);
+                break;
+            case "6":
+                BuscarPorCategoria(inventario);
                 break;
             case "0":
                 continuar = false;
@@ -155,4 +159,29 @@ static void BorrarInsumo(InventarioService servicio)
     Console.ForegroundColor = ConsoleColor.Green;
     Console.WriteLine($"\n¡Insumo con ID {id} eliminado de SQL Server!");
     Console.ResetColor();
+}
+
+static void BuscarPorCategoria(InventarioService servicio)
+{
+    Console.WriteLine("\n--- BUSQUEDA POR CATEGORIA ---");
+    Console.Write("Ingrese la categoría a buscar: ");
+    string categoriaBuscada = Console.ReadLine() ?? "";
+
+    // 1. Guardamos la lista que nos devuelve el servicio
+    List<Insumo> resultados = servicio.ObtenerPorCategoria(categoriaBuscada);
+
+    // 2. Validamos si encontró algo o vino vacía
+    if (resultados.Count == 0)
+    {
+        Console.WriteLine($"No se encontraron insumos en la categoría '{categoriaBuscada}'.");
+        return;
+    }
+
+    Console.WriteLine($"\n--- INSUMOS EN LA CATEGORÍA: {categoriaBuscada} ---");
+
+    // 3. El foreach para recorrer y mostrar cada insumo encontrado
+    foreach (Insumo i in resultados)
+    {
+        Console.WriteLine($"[ID: {i.Id}] {i.Nombre} | Precio: ${i.PrecioUnitario:N2} | Stock: {i.StockActual} (Mín: {i.StockMinimo})");
+    }
 }

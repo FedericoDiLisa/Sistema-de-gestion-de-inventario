@@ -30,6 +30,13 @@ public class InventarioService
                           .ToList();
     }
 
+    public List<Insumo> ObtenerPorCategoria(string categoriaBuscada)
+    {
+        return _repository.ObtenerTodos()
+                        .Where(i => i.Categoria.Equals(categoriaBuscada, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+    }
+
     public decimal CalcularValorTotalInventario()
     {
         return _repository.ObtenerTodos()
