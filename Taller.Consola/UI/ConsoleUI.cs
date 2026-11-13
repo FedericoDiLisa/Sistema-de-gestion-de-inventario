@@ -29,6 +29,7 @@ public class ConsolaUI
             Console.WriteLine("5. Eliminar un insumo por ID (DELETE)");
             Console.WriteLine("6. Buscar insumos por categoría");
             Console.WriteLine("7. Ver insumos ordenados por precio (mayor a menor)");
+            Console.WriteLine("8. Exportar inventario a CSV (Excel)");
             Console.WriteLine("0. Salir");
             Console.Write("\nSeleccione una opción: ");
 
@@ -58,6 +59,9 @@ public class ConsolaUI
                         break;
                     case "7":
                         MostrarOrdenadosPorPrecio();
+                        break;
+                    case "8":
+                        ExportarReporteCsv();
                         break;
                     case "0":
                         continuar = false;
@@ -212,4 +216,15 @@ public class ConsolaUI
             Console.WriteLine($"[ID: {i.Id}] {i.Nombre} | Precio: ${i.PrecioUnitario:N2} | Stock: {i.StockActual} (Mín: {i.StockMinimo})");
         }
     }
+
+    private void ExportarReporteCsv()
+    {
+        string nombreArchivo = "reporte_inventario.csv";
+        _servicio.ExportarInventarioCsv(nombreArchivo);
+
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"\n¡Reporte exportado con éxito! Buscá el archivo '{nombreArchivo}' en la carpeta del proyecto.");
+        Console.ResetColor();
+    }
+
 }

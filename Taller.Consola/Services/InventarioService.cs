@@ -74,4 +74,25 @@ public class InventarioService
         if (!eliminado)
             throw new KeyNotFoundException($"No se encontró ningún insumo con el ID {idInsumo} para eliminar.");
     }
+
+    public void ExportarInventarioCsv(string rutaArchivo)
+    {
+        List<Insumo> insumos = _repository.ObtenerTodos();
+        List<string> lineas = new List<string>();
+
+        // 1. Agregamos el encabezado (los títulos de las columnas en Excel)
+        lineas.Add("Id;Nombre;Categoria;PrecioUnitario;StockActual;StockMinimo;RequiereReposicion");
+
+        // 2. Recorremos los insumos y armamos un renglón por cada uno separado por ';'
+        foreach (Insumo i in insumos)
+        {
+            string alerta = i.RequiereReposicion() ? "SI" : "NO";
+            string fila = $"{i.Id};{i.Nombre};{i.Categoria};{i.PrecioUnitario:F2};{i.StockActual};{i.StockMinimo};{alerta}";
+            lineas.Add(fila);
+        }
+
+        // 3. Guardamos todas las líneas en el archivo físico (con UTF8 para que se vean bien las tildes en Excel)
+        File.WriteAllLines(rutaArchivo, lineas, System.Text.Encoding.UTF8);
+    }
 }
+
