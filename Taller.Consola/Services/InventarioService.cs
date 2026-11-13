@@ -37,6 +37,13 @@ public class InventarioService
                         .ToList();
     }
 
+    public List<Insumo> ObtenerOrdenadosPorPrecioDescendente()
+    {
+        return _repository.ObtenerTodos()
+                          .OrderByDescending(i => i.PrecioUnitario)
+                          .ToList();
+    }
+
     public decimal CalcularValorTotalInventario()
     {
         return _repository.ObtenerTodos()

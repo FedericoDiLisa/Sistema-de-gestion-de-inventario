@@ -15,6 +15,7 @@ while (continuar)
     Console.WriteLine("4. Registrar entrada / salida de stock (UPDATE)");
     Console.WriteLine("5. Eliminar un insumo por ID (DELETE)");
     Console.WriteLine("6. Buscar insumos por categoría");
+    Console.WriteLine("7. Ver insumos ordenados por precio (mayor a menor)");
     Console.WriteLine("0. Salir");
     Console.Write("\nSeleccione una opción: ");
 
@@ -41,6 +42,9 @@ while (continuar)
                 break;
             case "6":
                 BuscarPorCategoria(inventario);
+                break;
+            case"7":
+                MostrarOrdenadosPorPrecio(inventario);
                 break;
             case "0":
                 continuar = false;
@@ -180,6 +184,18 @@ static void BuscarPorCategoria(InventarioService servicio)
     Console.WriteLine($"\n--- INSUMOS EN LA CATEGORÍA: {categoriaBuscada} ---");
 
     // 3. El foreach para recorrer y mostrar cada insumo encontrado
+    foreach (Insumo i in resultados)
+    {
+        Console.WriteLine($"[ID: {i.Id}] {i.Nombre} | Precio: ${i.PrecioUnitario:N2} | Stock: {i.StockActual} (Mín: {i.StockMinimo})");
+    }
+}
+
+static void MostrarOrdenadosPorPrecio(InventarioService servicio)
+{
+    Console.WriteLine("\n--- MOSTRAR POR PRECIO DESCENDIENTE ---");
+
+     List<Insumo> resultados = servicio.ObtenerOrdenadosPorPrecioDescendente();
+
     foreach (Insumo i in resultados)
     {
         Console.WriteLine($"[ID: {i.Id}] {i.Nombre} | Precio: ${i.PrecioUnitario:N2} | Stock: {i.StockActual} (Mín: {i.StockMinimo})");
